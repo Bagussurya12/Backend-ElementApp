@@ -1,18 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import pkg from "pg";
+import connection from "./connection.js";
 
 import indexRouter from "./routes/index.js";
 
-const { Pool } = pkg;
 const env = dotenv.config().parsed;
-const pool = new Pool({
-  user: env.DB_USERNAME,
-  host: env.DB_HOST,
-  database: env.DB_DATABASE,
-  password: env.DB_PASSWORD,
-  port: env.DB_PORT,
-});
 
 var app = express();
 
@@ -22,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/", indexRouter);
 
 // Koneksi ke PostgreSQL
-pool.connect((err) => {
+connection.connect((err) => {
   if (err) {
     console.error("Failed to connect to PostgreSQL:", err);
   } else {
